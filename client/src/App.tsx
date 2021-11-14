@@ -84,9 +84,10 @@ function App() {
       <body className="m-2">
         <div className="bg-opacity-50 bg-gray-300 rounded-lg">
           <MyChart title="Incremental Revenue" array={resultHistory}/>
+          <hr/>
           <MyChart title="Pit History" array={resultHistory}/>
         </div>
-        <div className="bg-opacity-50 bg-gray-300 rounded-lg mt-6">
+        <div className="bg-opacity-50 bg-gray-300 rounded-lg">
           <div className="m-2">
             <h2 className="text-center text-lg font-semibold">
               Latest Result
