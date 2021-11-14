@@ -4,7 +4,7 @@
 //import Typography from '@material-ui/core/Typography';
 
 import React from 'react';
-import { ClientResponse, processRequest, ServerRequest, ServerResponse } from './optimization';
+import { ClientResponse, processRequest, ServerRequest, ServerResponse, getCurrPitVolumeList } from './optimization';
 import { AxisOptions, Chart } from 'react-charts'
 import './index.css'
 
@@ -22,9 +22,13 @@ function App() {
   const [request, setRequest] = React.useState<null | ServerRequest>(null);
   const [result, setResult] = React.useState<null | ServerResponse>(null);
   const [response, setResponse] = React.useState<null | ClientResponse>(null);
-
-  const [resultHistory, setResultHistory] = React.useState<Array<ServerResponse>>([]);
-
+    let [resultHistory, setResultHistory] = React.useState<Array<ServerResponse>>([]);
+    for (let i = 0; i < resultHistory.length; i++) {
+        if (typeof resultHistory[i] !== 'undefined') {
+            resultHistory[i].currentPitVolume = getCurrPitVolumeList()[i];
+        }
+    }
+    if (request === response) { }
   React.useEffect(() => {
     // const ws = new WebSocket('ws://localhost:9172');
     // eslint-disable-next-line no-restricted-globals
@@ -85,7 +89,7 @@ function App() {
         <div className="bg-opacity-50 bg-gray-300 rounded-lg">
           <MyChart title="Incremental Revenue" array={resultHistory}/>
           <hr/>
-          <MyChart title="Pit History" array={resultHistory}/>
+                  <MyChart title="Pit History" array={resultHistory}/>
         </div>
         <div className="bg-opacity-50 bg-gray-300 rounded-lg">
           <div className="m-2">
