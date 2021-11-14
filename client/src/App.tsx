@@ -67,12 +67,13 @@ function App() {
   }, [])
   
   //graph setup
+  const zeroVal: indexedValue = {value: 0, index: 0} // makes it so the graph starts at 0
   const data: Series[] = [
     {
-      label: "Incremental Revenue",
-      data: resultHistory.map(function(val: ServerResponse, idx: number): indexedValue {
-        return {value: val.incrementalRevenue, index: idx}
-      })
+      label: "Incremental Revenue Graph",
+      data: [zeroVal].concat(resultHistory.map(function(val: ServerResponse, idx: number): indexedValue {
+        return {value: val.incrementalRevenue, index: idx + 1}
+      }))
     }
   ]
   console.log(data[0].data)
@@ -90,31 +91,68 @@ function App() {
      ],
      []
    )
-
+  const utilizationPercent = (result?.flowRateToOperations ?? 0 )/ (result?.flowRateIn ?? 0) * 100
+  const revenue = result?.revenuePerDay ?? 0
+  const incRevenue = result?.incrementalRevenue ?? 0
+  var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
   return (
-    <div>
-      {false && <div className={""}>
-        <div>1.) Server Sends Current State of the System:</div>
-        <textarea rows={10} cols={150} value={JSON.stringify(request, undefined, 2)} />
-        <div>2.) Client Sends Solution to the Optimization:</div>
-        <textarea rows={10} cols={150} value={JSON.stringify(response, undefined, 2)}/>
-        <div>3.) Server Sends Result:</div>
-        <textarea rows={10} cols={150} value={JSON.stringify(result, undefined, 2)}/>
-      </div>}
-      {
-        (resultHistory.length > 1) &&
-        (
-          <div className="h-96">
-            <Chart
-              options={{
-                data,
-                primaryAxis,
-                secondaryAxes,
-              }}
-            />
+    <div className="bg-gradient-to-b from-blue-200 to-red-200 h-screen">
+      <header>
+        <h1 className="font-semibold text-xl text-center">
+          EOG Well Realtime Monitoring
+        </h1>
+      </header>
+      <body className="m-2">
+        <h2>
+          Incremental Revenue
+        </h2>
+        {
+          (resultHistory.length > 1) ?
+          (
+            <div className="h-96">
+              <Chart
+                options={{
+                  data,
+                  primaryAxis,
+                  secondaryAxes,
+                }}
+              />
+            </div>
+          )
+          : <div> loading data... </div>
+        }
+        <br/>
+        <div className="bg-opacity-50 bg-gray-400 rounded-lg">
+          <div className="m-2">
+            <h2 className="text-center text-lg font-semibold">
+              Latest Result
+            </h2>
+            <div>
+              <span> Type </span>
+              <span> {result?.type} </span>
+            </div>
+            <h3 className="font-bold">
+              Revenue
+            </h3>
+            <div className="">
+              <div className="">
+                <span>Incremental Revenue </span>
+                <span className=""> {formatter.format(incRevenue)} </span>
+              </div>
+              <div className="">
+                <span> Project Daily Revenue </span>
+                <span> {formatter.format(revenue)} </span>
+              </div>
+            </div>
+            <div>
+              Flow Rate Utilization: {isNaN(utilizationPercent) ? "not defined" : `${utilizationPercent.toFixed(1)}%`}
+            </div>
           </div>
-        )
-      }
+        </div>
+      </body>
     </div>
   );
 }
