@@ -59,11 +59,6 @@ function findCurrDollars(currFlow: number, points: Point[]) {
     // if we've reached here, we are beyond what the data provided can handle
     return Number.NEGATIVE_INFINITY; // don't try to extrapolate
 }
-/*
- * Split the sum of the flow and the pit's contents into discrete, equal-sized chunks. For each chunk, check 
- * which operation would give the greatest return on investment if given that chunk, and allocate the chunk 
- * accordingly. If no operation gives a sufficient return on investment, attempt to allocate that chunk to the pit.
-*/
 
 var currPitVolume = 0;
 var currPitVolumeList: number[] = [];
@@ -71,6 +66,11 @@ export function getCurrPitVolumeList() {
     return currPitVolumeList;
 }
 
+/*
+ * Split the sum of the flow and the pit's contents into discrete, equal-sized chunks. For each chunk, check
+ * which operation would give the greatest return on investment if given that chunk, and allocate the chunk
+ * accordingly. If no operation gives a sufficient return on investment, attempt to allocate that chunk to the pit.
+*/
 export function processRequest(request: ServerRequest): ClientResponse {
     // Make array mapping individual distributions to operations
     let distribution = new Array(request.operations.length);
