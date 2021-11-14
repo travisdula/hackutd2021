@@ -119,9 +119,9 @@ export function processRequest(request: ServerRequest): ClientResponse {
             distribution[bestIndex] += flowChunks;
             remainingFlow -= flowChunks;
         } else {
-            if (100000 - currPitVolume < flowChunks) {
-                flowChunks -= (100000 - currPitVolume);
-                currPitVolume = 100000; // simplified math
+            if (35000 - currPitVolume < flowChunks) {
+                flowChunks -= (35000 - currPitVolume);
+                currPitVolume = 35000; // simplified math
 
                 distribution[bestIndex] += flowChunks;
                 remainingFlow -= flowChunks;

@@ -31,7 +31,7 @@ function App() {
     const ws = new WebSocket(`wss://2021-utd-hackathon.azurewebsites.net`);
 
     ws.addEventListener('open', () => {
-      ws.send(JSON.stringify({setPitCapacity: 100000}));
+      ws.send(JSON.stringify({setPitCapacity: 35000}));
     })
 
     // When the server sends new data, we send how to optimally allocate the water
