@@ -69,12 +69,6 @@ var currPitVolume = 0;
 var currPitVolumeList: number[] = [];
 export function getCurrPitVolumeList() {
     return currPitVolumeList;
-    /*return currPitVolumeList.map((curr, index) => {
-        return {
-            volumeIndex: index,
-            currPitVol: currPitVolumeList[index],
-        }
-    })*/
 }
 
 export function processRequest(request: ServerRequest): ClientResponse {
