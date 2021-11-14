@@ -99,44 +99,46 @@ function App() {
     currency: 'USD',
   });
   return (
-    <div className="bg-gradient-to-b from-blue-200 to-red-200 h-screen">
+    <div className="bg-gradient-to-b from-blue-300 via-purple-300 to-red-300 h-screen">
       <header>
         <h1 className="font-semibold text-xl text-center">
           EOG Well Realtime Monitoring
         </h1>
       </header>
       <body className="m-2">
-        <h2>
-          Incremental Revenue
-        </h2>
-        {
-          (resultHistory.length > 1) ?
-          (
-            <div className="h-96">
-              <Chart
-                options={{
-                  data,
-                  primaryAxis,
-                  secondaryAxes,
-                }}
-              />
-            </div>
-          )
-          : <div> loading data... </div>
-        }
-        <br/>
-        <div className="bg-opacity-50 bg-gray-400 rounded-lg">
+        <div className="bg-opacity-50 bg-gray-300 rounded-lg">
+          <div className="m-2">
+            <h2 className="text-lg font-semibold text-center">
+              Incremental Revenue
+            </h2>
+            {
+              (resultHistory.length > 1) ?
+              (
+                <div className="h-96">
+                  <Chart
+                    options={{
+                      data,
+                      primaryAxis,
+                      secondaryAxes,
+                    }}
+                  />
+                </div>
+              )
+              : <div> loading data... </div>
+            }
+          </div>
+        </div>
+        <div className="bg-opacity-50 bg-gray-300 rounded-lg mt-6">
           <div className="m-2">
             <h2 className="text-center text-lg font-semibold">
               Latest Result
             </h2>
+            <hr className="border-gray-500 m-1"/>
             <div>
               <span> Type </span>
               <span> {result?.type} </span>
             </div>
-            <h3 className="font-bold">
-              Revenue
-            </h3>
+            <hr className="border-gray-500 m-1"/>
             <div className="">
               <div className="">
                 <span>Incremental Revenue </span>
@@ -147,6 +149,7 @@ function App() {
                 <span> {formatter.format(revenue)} </span>
               </div>
             </div>
+            <hr className="border-gray-500 m-1"/>
             <div>
               Flow Rate Utilization: {isNaN(utilizationPercent) ? "not defined" : `${utilizationPercent.toFixed(1)}%`}
             </div>
