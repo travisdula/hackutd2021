@@ -58,9 +58,7 @@ export function processRequest(request: ServerRequest): ClientResponse {
     // Make array mapping individual distributions to operations
     var distribution = new Array(request.operations.length);
     // Initialize to zero for safety
-    for (var i = 0; i < distribution.length; i++) {
-        distribution[i] = 0;
-    }
+    distribution.fill(0);
 
     // Iterate repeatedly over operations, using a part of the remaining flow on the best option per iteration
     // If return on investment is in the nth percentile or lower, attempt to store it in a pit instead
