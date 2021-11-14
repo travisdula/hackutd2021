@@ -66,31 +66,7 @@ function App() {
     }
   }, [])
   
-  //graph setup
-  const zeroVal: indexedValue = {value: 0, index: 0} // makes it so the graph starts at 0
-  const data: Series[] = [
-    {
-      label: "Incremental Revenue Graph",
-      data: [zeroVal].concat(resultHistory.map(function(val: ServerResponse, idx: number): indexedValue {
-        return {value: val.incrementalRevenue, index: idx + 1}
-      }))
-    }
-  ]
-  console.log(data[0].data)
-  const primaryAxis = React.useMemo(
-    (): AxisOptions<indexedValue> => ({
-      getValue: datum => datum.index,
-    }),
-    []
-  )
-   const secondaryAxes = React.useMemo(
-     (): AxisOptions<indexedValue>[] => [
-       {
-         getValue: datum => datum.value,
-       },
-     ],
-     []
-   )
+
   const utilizationPercent = (result?.flowRateToOperations ?? 0 )/ (result?.flowRateIn ?? 0) * 100
   const revenue = result?.revenuePerDay ?? 0
   const incRevenue = result?.incrementalRevenue ?? 0
@@ -99,7 +75,7 @@ function App() {
     currency: 'USD',
   });
   return (
-    <div className="bg-gradient-to-b from-blue-300 via-purple-300 to-red-300 h-screen">
+    <div className="bg-gradient-to-b from-blue-300 via-purple-300 to-red-300 min-h-screen h-full">
       <header>
         <h1 className="font-semibold text-xl text-center">
           EOG Well Realtime Monitoring
@@ -107,26 +83,8 @@ function App() {
       </header>
       <body className="m-2">
         <div className="bg-opacity-50 bg-gray-300 rounded-lg">
-          <div className="m-2">
-            <h2 className="text-lg font-semibold text-center">
-              Incremental Revenue
-            </h2>
-            {
-              (resultHistory.length > 1) ?
-              (
-                <div className="h-96">
-                  <Chart
-                    options={{
-                      data,
-                      primaryAxis,
-                      secondaryAxes,
-                    }}
-                  />
-                </div>
-              )
-              : <div> loading data... </div>
-            }
-          </div>
+          <MyChart title="Incremental Revenue" array={resultHistory}/>
+          <MyChart title="Pit History" array={resultHistory}/>
         </div>
         <div className="bg-opacity-50 bg-gray-300 rounded-lg mt-6">
           <div className="m-2">
@@ -158,6 +116,56 @@ function App() {
       </body>
     </div>
   );
+}
+
+function MyChart(props:any) {
+  const {title, array} = props
+  const zeroVal: indexedValue = {value: 0, index: 0} // makes it so the graph starts at 0
+  const data: Series[] = [
+    {
+      label: title,
+      data: [zeroVal].concat(array.map(function(val: ServerResponse, idx: number): indexedValue {
+        return {value: (title === "Incremental Revenue") ? val.incrementalRevenue : (val.currentPitVolume ?? 0), index: idx + 1}
+      }))
+    }
+  ]
+  const primaryAxis = React.useMemo(
+    (): AxisOptions<indexedValue> => ({
+      getValue: datum => datum.index,
+    }),
+    []
+  )
+   const secondaryAxes = React.useMemo(
+     (): AxisOptions<indexedValue>[] => [
+       {
+         getValue: datum => datum.value,
+       },
+     ],
+     []
+   )
+  //graph setup
+  return (
+    <div className="m-2">
+      <h2 className="text-lg font-semibold text-center">
+          {title}
+      </h2>
+      {
+        (array.length > 1) ?
+        (
+          <div className="h-96">
+            <Chart
+              options={{
+                data,
+                primaryAxis,
+                secondaryAxes,
+              }}
+            />
+          </div>
+        )
+        : <div> loading data... </div>
+      }
+    </div>
+  )
 }
 
 export default App;
